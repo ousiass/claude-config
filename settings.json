@@ -1,0 +1,16 @@
+{
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(npm list:*)",
+      "mcp__supabase__search_docs",
+      "mcp__supabase__list_projects",
+      "mcp__supabase__list_tables"
+    ]
+  },
+  "language": "日本語",
+  "alwaysThinkingEnabled": true,
+  "feedbackSurveyState": {
+    "lastShownTime": 1753948122944
+  }
+}
