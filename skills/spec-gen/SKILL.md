@@ -39,7 +39,8 @@ user-invocable: true
 5. 仕様書作成用の Issue を `gh issue create` で作成し、Issue 番号を取得する
    - タイトル: `docs: <プロジェクト名 or 機能名> の仕様書を作成`
 6. 作業ブランチ `feat/#<Issue番号>` を作成してチェックアウトする
-7. TodoWrite でドキュメント一覧をタスク化する
+7. `gh issue edit` で Issue 本文に作業ブランチ名 `feat/#<Issue番号>` を追記する
+8. TodoWrite でドキュメント一覧をタスク化する
 
 #### 既存仕様書への追記の場合
 1. 既存の仕様書をすべて読み込み、現在の仕様を正確に把握する
@@ -53,7 +54,8 @@ user-invocable: true
 6. 仕様書追記用の Issue を `gh issue create` で作成し、Issue 番号を取得する
    - タイトル: `docs: <機能名> の仕様書を追記`
 7. 作業ブランチ `feat/#<Issue番号>` を作成してチェックアウトする
-8. TodoWrite でタスク化する
+8. `gh issue edit` で Issue 本文に作業ブランチ名 `feat/#<Issue番号>` を追記する
+9. TodoWrite でタスク化する
 
 ### フェーズ2: ドキュメント作成サイクル（各ドキュメントに対して繰り返し）
 
@@ -107,6 +109,7 @@ user-invocable: true
    - 本文に以下を含める：
      - 要件サマリー（仕様書の内容を簡潔にまとめたもの）
      - 仕様書へのリンク（作成したドキュメントのパス一覧）
+     - 仕様書PR のリンク
 5. 作成内容のサマリーをユーザーに報告する（PR URL、feat Issue URL を含める）
 
 ## 改訂履歴フォーマット
