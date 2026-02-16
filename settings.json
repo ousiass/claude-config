@@ -17,7 +17,7 @@
   "language": "日本語",
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "teammateMode": "auto",
+  "teammateMode": "in-process",
   "feedbackSurveyState": {
     "lastShownTime": 1753948122944
   }
