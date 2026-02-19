@@ -8,18 +8,19 @@ Claude Code の開発ワークフローを拡張するスキル・エージェ�
 
 ```mermaid
 graph TD
-    subgraph プロジェクト開始
-        A["/spec-gen"] -->|設計ドキュメント + feat Issue| B["/impl #Issue"]
-        B -->|実装 → レビュー → PR| C["/code-review-git"]
-        C -->|PR前のセルフレビュー| D["/release"]
-        D -->|Changelog + タグ + GitHub Release| E((完了))
+    subgraph "プロジェクト開始"
+        A["/spec-gen"] -->|"設計ドキュメント + feat Issue"| B["/impl &#35;Issue"]
+        B -->|"実装 → レビュー → PR"| C["/code-review-git"]
+        C -->|"PR前のセルフレビュー"| C2["/doc-drift-git"]
+        C2 -->|"ドキュメント整合性チェック"| D["/release"]
+        D -->|"Changelog + タグ + GitHub Release"| E((完了))
     end
 
-    subgraph 運用・保守
-        F["/bug-report"] -->|バグを調査して Issue 作成| G["/bug-fix #Issue"]
-        G -->|修正 → テスト → PR| H((完了))
-        I["/code-review"] -->|コードベース全体の品質チェック| J((レポート))
-        K["/doc-drift"] -->|ドキュメントと実装の乖離検出| L((レポート))
+    subgraph "運用・保守"
+        F["/bug-report"] -->|"バグを調査して Issue 作成"| G["/bug-fix &#35;Issue"]
+        G -->|"修正 → テスト → PR"| H((完了))
+        I["/code-review"] -->|"コードベース全体の品質チェック"| J((レポート))
+        K["/doc-drift"] -->|"ドキュメントと実装の乖離検出"| L((レポート))
     end
 ```
 
@@ -30,7 +31,7 @@ graph TD
 
 | シナリオ | 手順 |
 |---------|------|
-| **新機能を作る** | `/spec-gen` → 設計 → `/impl #Issue` → 実装 → `/code-review-git` → セルフレビュー → PR |
+| **新機能を作る** | `/spec-gen` → 設計 → `/impl #Issue` → 実装 → `/code-review-git` → セルフレビュー → `/doc-drift-git` → ドキュメント整合性チェック → PR |
 | **バグを直す** | `/bug-report` → Issue 作成 → `/bug-fix #Issue` → 修正 → PR |
 | **リリースする** | `/release` → Changelog + タグ + GitHub Release |
 | **品質を確認する** | `/code-review` で全体チェック、`/doc-drift` でドキュメント乖離チェック |
