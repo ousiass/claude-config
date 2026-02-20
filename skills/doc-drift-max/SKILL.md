@@ -42,9 +42,9 @@ user-invocable: true
 
 ## フェーズ3: レポート生成
 
-1. 出力先を判定する
-   - `gh` 利用可能 + git リポジトリ内 → GitHub Issue（タイトル: `review: ドキュメント乖離レポート(<ブランチ名>, <YYYY-MM-DD>)`）
-   - 上記以外 → `doc-drift-report.md` を生成
+1. `AskUserQuestion` で出力先をユーザーに確認する：
+   - **GitHub Issue に作成**（推奨）: タイトル `review: ドキュメント乖離レポート(<ブランチ名>, <YYYY-MM-DD>)`
+   - **ローカル MD ファイルに保存**: プロジェクトルートに `doc-drift-report.md` を生成
 2. レポート形式は `templates/report.md` を参照
 3. 要約をユーザーに報告する
 

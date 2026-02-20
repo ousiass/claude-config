@@ -38,7 +38,9 @@ user-invocable: true
 
 1. 全チェッカーの結果を収集
 2. `doc-drift-max` のレポート形式（`templates/report.md`）に従い統合レポートを生成
-3. 出力先判定: `gh` 利用可能 → GitHub Issue / それ以外 → `doc-drift-report.md`
+3. `AskUserQuestion` で出力先をユーザーに確認する：
+   - **GitHub Issue に作成**（推奨）: `review: ドキュメント乖離レポート(<ブランチ名>, <YYYY-MM-DD>)`
+   - **ローカル MD ファイルに保存**: プロジェクトルートに `doc-drift-report.md` を生成
 4. 要約をユーザーに報告
 
 ## フェーズ4: チーム解散
