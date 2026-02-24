@@ -27,6 +27,8 @@ user-invocable: true
    - テキスト: そのまま要件として扱う
    - 引数なし: ユーザーにヒアリング
 2. 現在のブランチをベースブランチとして記録する（PR のマージ先）
+   - `git branch --show-current` を実行し、結果をユーザーに「ベースブランチ: <ブランチ名>」と明示的に表示する
+   - このブランチ名をフェーズ3のPR作成時まで保持する
 3. 作業ブランチ名を決定する（命名規則は `references/branch-naming.md` を参照）
 4. **git worktree を作成する**（手順は `references/worktree-setup.md` を参照）
 5. 要件を「独立して実装・テストできる単位」に分割
@@ -75,6 +77,8 @@ user-invocable: true
 2. **worktree ディレクトリ内で** 全体テストを実行
 3. **worktree ディレクトリ内で** `git push -u origin <作業ブランチ>` を実行
 4. `gh pr create --base <ベースブランチ>` でPRを作成
+   - **ベースブランチはフェーズ1で記録した開始時のブランチを指定する。`main` や `master` にフォールバックしないこと。**
+   - 不明な場合は `git log --oneline --graph HEAD...main` 等で分岐元を確認する
    - Issue 指定時: タイトルに Issue 番号を含め、本文先頭に `Closes #<番号>` を記載
    - PR本文: 変更サマリー + 手動チェックリスト（`templates/pr-checklist.md` を参照）
 5. 実装サマリーと **worktree パス** をユーザーに報告する
