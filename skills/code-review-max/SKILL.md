@@ -30,6 +30,7 @@ user-invocable: true
 
 チェック観点の詳細は以下を参照：
 - 全体共通: `references/check-common.md`
+- Linterly: `references/check-linterly.md`
 - フロントエンド: `references/check-frontend.md`（Atomic Design ルール含む）
 - バックエンド: `references/check-backend.md`
 - リファクタリング: `references/check-refactoring.md`

@@ -35,7 +35,8 @@ user-invocable: true
 | **ディレクトリ構成** | 責務に応じた適切なディレクトリ分けがされているか |
 | **Makefile** | Makefile が存在し、`make` または `make help` でコマンド一覧が確認できるか |
 | **Lint & Format** | lint / format の設定が存在し、実行可能な状態か。未設定の場合は導入を提案 |
-| **Git Hooks (husky)** | husky が導入されているか。pre-commit で lint / format / test が実行される設定か。pre-push で build が実行される設定か。未設定の場合は導入を提案 |
+| **Git Hooks (lefthook/husky)** | lefthook または husky が導入されているか。pre-commit で lint / format / test が実行される設定か。pre-push で build が実行される設定か。未設定の場合は導入を提案 |
+| **Linterly (行数チェック)** | 後述の Linterly チェックルールに準拠しているか |
 | **環境変数管理** | `.env.example` 等が整備されているか。シークレットがハードコードされていないか |
 | **エラーハンドリング** | エラーが適切に処理されているか。握りつぶしや不適切な無視がないか |
 | **重複コード** | 同一・類似ロジックの重複がないか。共通化すべき箇所の特定 |
@@ -43,6 +44,18 @@ user-invocable: true
 | **テストカバレッジ・品質** | テストが存在するか。Happy Path だけでなく異常系・境界値のテストがあるか。テストを実行して全件パスするか確認する。カバレッジ計測が可能な場合は実行し、カバレッジ率をレポートに含める |
 | **CI/CD 設定** | CI が設定されているか。lint / test / build が自動化されているか |
 | **`.gitignore`** | ビルド成果物、`node_modules`、`.env` 等が適切に除外されているか |
+
+##### Linterly チェックルール
+
+行数チェックツール [Linterly](https://github.com/ousiassllc/Linterly) の導入・設定を検証する。
+
+| チェック項目 | 基準 |
+|------------|------|
+| **インストール** | `@linterly/cli`（npm）または `go install` でインストールされているか。`package.json` の devDependencies または `go.mod` で確認 |
+| **設定ファイル** | `.linterly.yml` がプロジェクトルートに存在するか |
+| **デフォルト値の維持** | `max_lines_per_file: 300`、`max_lines_per_directory: 2000`、`warning_threshold: 10` がデフォルトから変更されていないか。変更されている場合は 🟠 重要 で指摘し、変更理由の正当性を確認する |
+| **ignore の濫用防止** | `.linterlyignore` や `.linterly.yml` の `ignore` フィールドに、行数制限を回避するための不要な除外パターンが追加されていないか。`*.pb.go` や `*_generated.*` など自動生成ファイルの除外は許容。それ以外のソースコードの除外は 🟠 重要 で指摘 |
+| **lefthook 統合** | `lefthook.yml` の pre-commit に `linterly check` が含まれているか。未設定の場合は導入を提案 |
 
 #### フロントエンド
 

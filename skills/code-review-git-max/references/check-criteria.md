@@ -12,3 +12,4 @@
 | **重複コード** | 既存コードとの重複が発生していないか |
 | **依存関係** | 新しい依存が妥当か。不要な依存がないか |
 | **一貫性** | プロジェクトの既存パターン・規約に沿っているか |
+| **Linterly 設定の改変** | `.linterly.yml` のデフォルト値（`max_lines_per_file: 300`, `max_lines_per_directory: 2000`, `warning_threshold: 10`）が緩和されていないか。`.linterlyignore` に不要な除外追加がないか。`lefthook.yml` から `linterly check` が削除されていないか |

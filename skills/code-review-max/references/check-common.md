@@ -6,7 +6,8 @@
 | **ディレクトリ構成** | 責務に応じた適切な分離がされているか |
 | **Makefile** | 存在し、`make` または `make help` でコマンド一覧が確認できるか |
 | **Lint & Format** | 設定が存在し実行可能か。未設定なら導入を提案 |
-| **Git Hooks (husky)** | pre-commit で lint/format/test、pre-push で build が実行されるか。未設定なら導入を提案 |
+| **Git Hooks (lefthook/husky)** | lefthook または husky が導入され、pre-commit で lint/format/test、pre-push で build が実行されるか。未設定なら導入を提案 |
+| **Linterly (行数チェック)** | Linterly が導入されているか。デフォルト設定が維持されているか。ignore の濫用がないか。lefthook の pre-commit に `linterly check` が含まれているか。詳細は `references/check-linterly.md` を参照 |
 | **環境変数管理** | `.env.example` が整備されているか。シークレットがハードコードされていないか |
 | **エラーハンドリング** | 適切に処理されているか。握りつぶしや不適切な無視がないか |
 | **重複コード** | 同一・類似ロジックの重複がないか |
