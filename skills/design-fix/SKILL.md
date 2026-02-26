@@ -1,12 +1,12 @@
 ---
-name: design-fix-max
+name: design-fix
 description: デザインレビューやデザイン変更Issueの指摘を修正し、デザイン検証付きでPRを作成する。
 user-invocable: true
 ---
 
-# design-fix-max
+# design-fix
 
-`design-review-max` や `design-request-max` で作成された Issue・レポートの指摘を修正する。修正後にデザイン観点の検証を行い、トークン準拠やアクセシビリティの維持を確認する。
+`design-review` や `design-request` で作成された Issue・レポートの指摘を修正する。修正後にデザイン観点の検証を行い、トークン準拠やアクセシビリティの維持を確認する。
 
 ## 前提条件
 
@@ -15,9 +15,9 @@ user-invocable: true
 
 ## 引数
 
-- **Issue 番号** (例: `/design-fix-max #45`): GitHub Issue からデザイン指摘を取得
-- **Issue URL** (例: `/design-fix-max https://github.com/owner/repo/issues/45`): 同上
-- **MD ファイルパス** (例: `/design-fix-max design-review-report.md`): ローカルレポートから指摘を取得
+- **Issue 番号** (例: `/design-fix #45`): GitHub Issue からデザイン指摘を取得
+- **Issue URL** (例: `/design-fix https://github.com/owner/repo/issues/45`): 同上
+- **MD ファイルパス** (例: `/design-fix design-review-report.md`): ローカルレポートから指摘を取得
 - **引数なし**: ユーザーにヒアリング
 
 ## フェーズ1: 指摘の取得と整理

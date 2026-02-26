@@ -1,10 +1,10 @@
 ---
-name: design-request-max
+name: design-request
 description: デザインを見ながら対話で変更要望をまとめ、構造化されたIssueを作成する。
 user-invocable: true
 ---
 
-# design-request-max
+# design-request
 
 デザイン参照（スクリーンショット、モックアップ、口頭説明）をもとに、対話で変更要望を整理し、実装可能な Issue を作成する。非エンジニアでも利用可能。
 
@@ -15,7 +15,7 @@ user-invocable: true
 
 ## 引数
 
-- **テキスト / 画像パス** (例: `/design-request-max ヘッダーのデザインを変えたい`): 初期情報として扱い、不足分をヒアリング
+- **テキスト / 画像パス** (例: `/design-request ヘッダーのデザインを変えたい`): 初期情報として扱い、不足分をヒアリング
 - **引数なし**: 最初からヒアリングを開始
 
 ## フェーズ1: デザイン参照の取得とプロジェクト把握

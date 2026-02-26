@@ -1,10 +1,10 @@
 ---
-name: design-review-max
+name: design-review
 description: UIコンポーネントのデザイン品質をレビューし、Issue またはレポートを生成する。
 user-invocable: true
 ---
 
-# design-review-max
+# design-review
 
 ## 前提条件
 

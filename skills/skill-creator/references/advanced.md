@@ -687,4 +687,4 @@ Changes:
 
 **Tools:**
 - skill-creator: Official skill creation tool
-- skill-creator-max: This enhanced version
+- skill-creator: This enhanced version

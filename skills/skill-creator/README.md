@@ -1,10 +1,10 @@
-# skill-creator-max
+# skill-creator
 
 Enhanced skill creator based on Anthropic's complete 33-page official guide.
 
 ## What's Different?
 
-**skill-creator-max** adds comprehensive best practices from the official guide:
+**skill-creator** adds comprehensive best practices from the official guide:
 
 - Token optimization strategies
 - Progressive disclosure patterns
@@ -16,12 +16,12 @@ Enhanced skill creator based on Anthropic's complete 33-page official guide.
 
 ### Manus
 ```bash
-unzip skill-creator-max.zip -d ~/skills/
+unzip skill-creator.zip -d ~/skills/
 ```
 
 ### Claude Code
 ```bash
-unzip skill-creator-max.zip -d ~/.claude/skills/
+unzip skill-creator.zip -d ~/.claude/skills/
 ```
 
 ### Claude.ai
@@ -30,7 +30,7 @@ Extract and upload via Settings > Capabilities > Skills
 ## Usage
 
 ```
-Use skill-creator-max to help me build a skill for [your task]
+Use skill-creator to help me build a skill for [your task]
 ```
 
 The skill guides you through:
@@ -69,7 +69,7 @@ Identical across Claude.ai, Claude Code, API.
 ## What's Included
 
 ```
-skill-creator-max/
+skill-creator/
 ├── SKILL.md (228 lines, ~1200 tokens)
 └── references/
     ├── patterns.md (7 proven patterns with examples)
@@ -78,7 +78,7 @@ skill-creator-max/
 
 ## Comparison
 
-| Feature | skill-creator | skill-creator-max |
+| Feature | skill-creator | skill-creator |
 |---------|---------------|-------------------|
 | Source | Anthropic | Community + Official Guide |
 | SKILL.md size | ~240 lines | ~230 lines |

@@ -1,10 +1,12 @@
 ---
-name: bug-fix-max
-description: バグ報告から調査・原因特定・修正・回帰テストまでを体系的に行う。
+name: bug-fix-wt
+description: git worktree で隔離した環境でバグ調査・修正・回帰テスト・PR作成を行う。
 user-invocable: true
 ---
 
-# bug-fix-max
+# bug-fix-wt
+
+`bug-fix` の worktree 隔離版。メインの作業ツリーを汚さずにバグ修正を行う。
 
 ## 前提条件
 
@@ -13,12 +15,12 @@ user-invocable: true
 
 ## 引数
 
-- **Issue 番号** (例: `/bug-fix-max #42`): GitHub Issue からバグ報告を取得
-- **Issue URL** (例: `/bug-fix-max https://github.com/owner/repo/issues/42`): 同上
-- **テキスト** (例: `/bug-fix-max ログイン時に500エラー`): テキストをバグ報告として扱う
+- **Issue 番号** (例: `/bug-fix-wt #42`): GitHub Issue からバグ報告を取得
+- **Issue URL** (例: `/bug-fix-wt https://github.com/owner/repo/issues/42`): 同上
+- **テキスト** (例: `/bug-fix-wt ログイン時に500エラー`): テキストをバグ報告として扱う
 - **引数なし**: ユーザーにバグの症状をヒアリング
 
-## フェーズ1: バグ報告の整理とブランチ作成
+## フェーズ1: バグ報告の整理と worktree 作成
 
 1. 引数からバグ報告を取得する
    - Issue: `gh issue view` で本文・コメント・ラベルを読み取る
@@ -33,12 +35,15 @@ user-invocable: true
 3. 現在のブランチをベースブランチとして記録する（PR のマージ先）
    - `git branch --show-current` を実行し、結果をユーザーに「ベースブランチ: <ブランチ名>」と明示的に表示する
    - このブランチ名をフェーズ4のPR作成時まで保持する
-4. 作業ブランチを作成する
+4. 作業ブランチ名を決定する
    - Issue 指定: `fix/#<Issue番号>` （例: `fix/#42`）
    - テキスト / 引数なし: `fix/<バグの要約>` （例: `fix/login-500-error`）
-5. TaskCreate でタスクを管理する
+5. **git worktree を作成する**（手順は `references/worktree-setup.md` を参照）
+6. TaskCreate でタスクを管理する
 
 ## フェーズ2: 原因調査
+
+**重要: フェーズ2以降のすべての操作は worktree ディレクトリ内で行う。**
 
 1. **再現確認** — バグ報告の再現手順に従い再現を確認。再現不可ならユーザーに追加情報を求める
 2. **影響範囲の特定** — `Explore` エージェントや `Grep`/`Glob` で関連コードを調査。関連テストも確認
@@ -57,24 +62,34 @@ user-invocable: true
 
 #### 3-4: Review
 - `review` エージェントで修正内容をレビューする
+- プロンプトに worktree パスを含める
 
 #### 3-5: 改善サイクル
 - レビュー指摘あり → 修正 → 再レビュー → 指摘なしまで繰り返す
 
 #### 3-6: Format & Lint
-- プロジェクト設定に従い変更ファイルに format/lint を実行。設定なしならスキップ
+- **worktree ディレクトリ内で** format/lint を実行。設定なしならスキップ
 
 #### 3-7: Commit
+- **worktree ディレクトリ内で** `git add` / `git commit` を実行
 - コミットメッセージは CLAUDE.md の規約に従う
 
 ## フェーズ4: プルリクエスト
 
-1. `gh pr create --base <ベースブランチ>` でPRを作成
+1. **worktree ディレクトリ内で** `git push -u origin <作業ブランチ>` を実行
+2. `gh pr create --base <ベースブランチ>` でPRを作成
    - **ベースブランチはフェーズ1で記録した開始時のブランチを指定する。`main` や `master` にフォールバックしないこと。**
    - 不明な場合は `git log --oneline --graph HEAD...main` 等で分岐元を確認する
    - Issue 指定時: タイトルに Issue 番号を含め、`Closes #<番号>` で紐付ける
    - PR本文: バグの症状・原因・修正サマリー + 手動チェックリスト（`templates/pr-checklist.md` を参照）
-2. 修正サマリーをユーザーに報告する
+3. 修正サマリーと **worktree パス** をユーザーに報告する
+
+報告例:
+```
+## 完了
+- PR: <URL>
+- Worktree: <パス>（確認後 `git worktree remove <パス>` で削除可能）
+```
 
 ## ルール
 
@@ -84,3 +99,4 @@ user-invocable: true
 - 原因と修正方針は必ずユーザーに報告し合意を得る
 - 🔴🟠 のレビュー指摘は必ず修正。🟡🟢 は明確なメリットがある場合のみ
 - TaskCreate/TaskUpdate で進捗を管理する
+- **すべての git / ファイル操作は worktree ディレクトリ内で行う。メインの作業ツリーを変更しない。**

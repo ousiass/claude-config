@@ -126,10 +126,10 @@ For fast review, checks top 5 issues:
 - **Best practices** - Ensure compliance with official guide
 - **Learning** - Understand what makes good skills
 
-## Companion to skill-creator-max
+## Companion to skill-creator
 
 Use together:
-- **skill-creator-max** - Create new skills
+- **skill-creator** - Create new skills
 - **skill-reviewer** - Review and improve existing skills
 
 ## Credits

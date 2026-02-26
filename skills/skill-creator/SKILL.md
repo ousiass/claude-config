@@ -1,5 +1,5 @@
 ---
-name: skill-creator-max
+name: skill-creator
 description: Enhanced skill creator based on Anthropic's 33-page official guide. Use for creating high-quality skills with complete best practices, progressive disclosure patterns, and token optimization strategies.
 ---
 
@@ -177,7 +177,7 @@ Package and send to user for testing.
 
 ## Common Patterns
 
-See `/home/ubuntu/skill-creator-max/references/patterns.md` for detailed examples:
+See `/home/ubuntu/skill-creator/references/patterns.md` for detailed examples:
 - Document processing workflows
 - Code generation patterns
 - API integration patterns
@@ -185,7 +185,7 @@ See `/home/ubuntu/skill-creator-max/references/patterns.md` for detailed example
 
 ## Advanced Topics
 
-See `/home/ubuntu/skill-creator-max/references/advanced.md` for:
+See `/home/ubuntu/skill-creator/references/advanced.md` for:
 - Token optimization strategies
 - Multi-domain skill structures
 - Conditional workflow patterns
