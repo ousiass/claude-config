@@ -4,6 +4,8 @@ description: Generate changelog, version tag, and GitHub release notes.
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # release-en
 
 ## Prerequisites

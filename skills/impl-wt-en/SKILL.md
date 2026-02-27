@@ -4,6 +4,8 @@ description: Implementation cycle in an isolated git worktree environment with P
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # impl-wt-en
 
 Worktree-isolated version of `impl`. Implements without affecting the main working tree.

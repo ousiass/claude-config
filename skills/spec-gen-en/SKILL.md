@@ -4,6 +4,8 @@ description: Interactively create design documents for new projects. Also suppor
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # spec-gen-en
 
 Actively discuss with the user to resolve unknowns, presenting reference ideas to solidify specifications.

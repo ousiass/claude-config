@@ -4,6 +4,8 @@ description: Check doc-code consistency on git diff against remote and generate 
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # doc-drift-git-en
 
 **Cross-reference changes within the diff only.** Does not scan all project docs.

@@ -4,6 +4,8 @@ description: Review UI component design quality and generate Issue or report.
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # design-review-en
 
 ## Prerequisites

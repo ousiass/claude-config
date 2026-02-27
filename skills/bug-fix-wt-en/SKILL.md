@@ -4,6 +4,8 @@ description: Bug investigation, fix, regression test, and PR creation in an isol
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # bug-fix-wt-en
 
 Worktree-isolated version of `bug-fix`. Fixes bugs without affecting the main working tree.

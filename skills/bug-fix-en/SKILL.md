@@ -4,6 +4,8 @@ description: Systematic bug investigation, root cause analysis, fix, and regress
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # bug-fix-en
 
 ## Prerequisites

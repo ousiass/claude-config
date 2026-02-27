@@ -4,6 +4,8 @@ description: Gather design change requests through interactive dialog and create
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # design-request-en
 
 Organize design change requests through dialog with design references (screenshots, mockups, verbal description) and create an actionable Issue. Usable by non-engineers.

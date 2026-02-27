@@ -4,6 +4,8 @@ description: Code quality check and doc drift detection on git diff against remo
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # code-review-git-en
 
 Ideal for self-review before PR creation or final check before merge.

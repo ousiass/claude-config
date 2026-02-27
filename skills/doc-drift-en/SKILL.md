@@ -4,6 +4,8 @@ description: Check documentation vs implementation code consistency and generate
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # doc-drift-en
 
 **Treat specifications as the source of truth (Single Source of Truth).** Report drift as implementation-side issues by default.

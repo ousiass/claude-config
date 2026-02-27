@@ -4,6 +4,8 @@ description: Full codebase quality check and refactoring review with report gene
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # code-review-en
 
 ## Prerequisites

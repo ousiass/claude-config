@@ -4,6 +4,8 @@ description: Interactively gather bug details, investigate code, and create a st
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # bug-report-en
 
 Usable by non-engineers. Just answer questions to create a proper bug report.

@@ -4,6 +4,8 @@ description: Resolve PR conflicts safely in an isolated git worktree by specifyi
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # resolve-conflicts-en
 
 Resolve PR conflicts safely in an isolated worktree.

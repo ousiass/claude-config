@@ -4,6 +4,8 @@ description: Fix design review or design change Issue findings with design verif
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # design-fix-en
 
 Fixes findings from `design-review` or `design-request` Issues/reports. Runs design verification after fixes to confirm token compliance and accessibility.

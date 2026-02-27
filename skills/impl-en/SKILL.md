@@ -4,6 +4,8 @@ description: Iterative implementation cycle with scope splitting, develop, revie
 user-invocable: true
 ---
 
+**Language: Always interact with the user in 日本語.**
+
 # impl-en
 
 ## Prerequisites
