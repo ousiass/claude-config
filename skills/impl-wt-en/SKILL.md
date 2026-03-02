@@ -28,14 +28,20 @@ Worktree-isolated version of `impl`. Implements without affecting the main worki
    - Issue: Read body and comments via `gh issue view`
    - Text: Use as-is
    - No arguments: Interview the user
-2. Record the current branch as the base branch (PR merge target)
+2. Check for spec documents
+   - If CLAUDE.md specifies the spec location, follow it
+   - Otherwise, search broadly with Glob (`**/SPEC.md`, `**/spec/**`, `docs/**`, etc.)
+   - Read any documents linked in the Issue body
+   - Cross-reference spec contents with requirements and use as implementation input
+   - If no spec found, proceed as-is
+3. Record the current branch as the base branch (PR merge target)
    - Run `git branch --show-current` and display to user: "Base branch: <branch-name>"
    - Retain this name until PR creation in Phase 3
-3. Determine the working branch name (see `references/branch-naming.md`)
-4. **Create git worktree** (see `references/worktree-setup.md`)
-5. Split requirements into independently implementable and testable units
-6. Sort by dependencies and determine implementation order
-7. Create tasks with TaskCreate
+4. Determine the working branch name (see `references/branch-naming.md`)
+5. **Create git worktree** (see `references/worktree-setup.md`)
+6. Split requirements into independently implementable and testable units
+7. Sort by dependencies and determine implementation order
+8. Create tasks with TaskCreate
 
 - Explore and understand the codebase to grasp requirements accurately
 - Confirm unclear specs with the user
@@ -44,6 +50,8 @@ Worktree-isolated version of `impl`. Implements without affecting the main worki
 ## Phase 2: Implementation Cycle (repeat per scope)
 
 **IMPORTANT: Specify the worktree path as working directory in all subagent calls during Phase 2.**
+
+**Set the current scope task to `in_progress` via `TaskUpdate` at the start of each scope.**
 
 #### 2-1: Plan
 - Create an implementation plan with the `Plan` agent
@@ -72,6 +80,7 @@ Worktree-isolated version of `impl`. Implements without affecting the main worki
 - **Commit at each scope completion. Never skip.**
 - **Run `git add` / `git commit` inside the worktree directory**
 - Follow commit message conventions in CLAUDE.md
+- **After committing, set the task to `completed` via `TaskUpdate`**
 
 ## Phase 3: Final Verification and PR Creation
 
@@ -98,4 +107,5 @@ Report example:
 - **Commit at each scope completion.** Never proceed without committing
 - Fix review issues at all severity levels
 - Track progress with TaskCreate/TaskUpdate
+- On compaction (context compression), check current progress with `TaskList` before resuming work
 - **All git/file operations must be inside the worktree directory. Never modify the main working tree.**

@@ -26,19 +26,27 @@ user-invocable: true
    - Issue: Read body and comments via `gh issue view`
    - Text: Use as-is
    - No arguments: Interview the user
-2. Record the current branch as the base branch (PR merge target)
+2. Check for spec documents
+   - If CLAUDE.md specifies the spec location, follow it
+   - Otherwise, search broadly with Glob (`**/SPEC.md`, `**/spec/**`, `docs/**`, etc.)
+   - Read any documents linked in the Issue body
+   - Cross-reference spec contents with requirements and use as implementation input
+   - If no spec found, proceed as-is
+3. Record the current branch as the base branch (PR merge target)
    - Run `git branch --show-current` and display to user: "Base branch: <branch-name>"
    - Retain this name until PR creation in Phase 3
-3. Determine the working branch (see `references/branch-naming.md`)
-4. Split requirements into independently implementable and testable units
-5. Sort by dependencies and determine implementation order
-6. Create tasks with TaskCreate
+4. Determine the working branch (see `references/branch-naming.md`)
+5. Split requirements into independently implementable and testable units
+6. Sort by dependencies and determine implementation order
+7. Create tasks with TaskCreate
 
 - Explore and understand the codebase to grasp requirements accurately
 - Confirm unclear specs with the user
 - Confirm backward compatibility with the user if breaking changes exist
 
 ## Phase 2: Implementation Cycle (repeat per scope)
+
+**Set the current scope task to `in_progress` via `TaskUpdate` at the start of each scope.**
 
 #### 2-1: Plan
 - Create an implementation plan with the `Plan` agent
@@ -62,6 +70,7 @@ user-invocable: true
 #### 2-6: Commit (mandatory)
 - **Commit at each scope completion. Never skip.**
 - Follow commit message conventions in CLAUDE.md
+- **After committing, set the task to `completed` via `TaskUpdate`**
 
 ## Phase 3: Final Verification and PR Creation
 
@@ -80,3 +89,4 @@ user-invocable: true
 - **Commit at each scope completion.** Never proceed without committing
 - Fix review issues at all severity levels
 - Track progress with TaskCreate/TaskUpdate
+- On compaction (context compression), check current progress with `TaskList` before resuming work
