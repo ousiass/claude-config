@@ -29,6 +29,10 @@ usage-data/
 
 # プラグインローカル設定
 plugins/blocklist.json
+plugins/cache/
+plugins/installed_plugins.json
+plugins/config.json
+plugins/repos/
 
 # ビルド成果物
 tools/swm/swm
