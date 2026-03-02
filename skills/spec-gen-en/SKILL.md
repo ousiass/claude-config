@@ -46,6 +46,9 @@ Confirm with `AskUserQuestion`:
 2. Present similar projects and tech stack direction
 3. Agree on document scope
 4. **GitHub Issue mode**: Record base branch -> create feat Issue -> create `feat/#<issue-number>` branch -> add branch name to Issue
+   - **Issue title must describe the feature to implement** (e.g., `feat: User authentication`). Never use document-centric titles like "Create design documents"
+   - Issue body should be a summary of implementation requirements; add design document links as supplementary references
+   - This ensures that the `impl` skill correctly focuses on feature implementation when reading the Issue
 5. Create tasks with TaskCreate
 
 #### For Appending to Existing Specs
@@ -53,7 +56,7 @@ Confirm with `AskUserQuestion`:
 2. Interview about additions
 3. Present existing feature reuse/change proposals
 4. Agree on direction
-5. **GitHub Issue mode**: Same as above
+5. **GitHub Issue mode**: Same as above (Issue title describes the feature to add)
 6. Create tasks with TaskCreate
 
 ## Phase 2: Document Creation Cycle (repeat per document)
