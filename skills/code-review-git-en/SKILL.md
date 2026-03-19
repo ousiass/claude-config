@@ -63,6 +63,7 @@ Run tests if possible and include results in report.
 1. Confirm output destination with `AskUserQuestion`:
    - **GitHub Issue** (recommended): `review: Git diff review (<branch> -> <comparison>, <YYYY-MM-DD>)`
    - **Local MD**: `code-review-git-report.md`
+   - **Console output**: Print the report directly in the conversation
 2. Use report format from `templates/report.md`
 3. Report summary to user
 

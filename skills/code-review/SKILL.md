@@ -40,6 +40,7 @@ user-invocable: true
 1. `AskUserQuestion` で出力先を確認：
    - **GitHub Issue**（推奨）: タイトル `review: コード品質レポート(<ブランチ名>, <YYYY-MM-DD>)`
    - **ローカル MD ファイル**: `code-review-report.md`
+   - **コンソール出力**: レポートをそのまま会話に出力
 2. レポート形式は `templates/report.md` を参照
 3. 要約をユーザーに報告する
 

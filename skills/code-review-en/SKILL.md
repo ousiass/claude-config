@@ -42,6 +42,7 @@ Check criteria details in:
 1. Confirm output destination with `AskUserQuestion`:
    - **GitHub Issue** (recommended): Title `review: Code quality report (<branch>, <YYYY-MM-DD>)`
    - **Local MD file**: `code-review-report.md`
+   - **Console output**: Print the report directly in the conversation
 2. Use report format from `templates/report.md`
 3. Report summary to user
 

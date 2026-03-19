@@ -61,6 +61,7 @@ PR 作成前のセルフレビューやマージ前の最終確認に最適。
 1. `AskUserQuestion` で出力先確認:
    - **GitHub Issue**（推奨）: `review: Git差分レビュー(<ブランチ名> → <比較先>, <YYYY-MM-DD>)`
    - **ローカル MD**: `code-review-git-report.md`
+   - **コンソール出力**: レポートをそのまま会話に出力
 2. レポート形式は `templates/report.md` を参照
 3. 要約をユーザーに報告
 

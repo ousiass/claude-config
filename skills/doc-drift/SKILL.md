@@ -45,6 +45,7 @@ user-invocable: true
 1. `AskUserQuestion` で出力先をユーザーに確認する：
    - **GitHub Issue に作成**（推奨）: タイトル `review: ドキュメント乖離レポート(<ブランチ名>, <YYYY-MM-DD>)`
    - **ローカル MD ファイルに保存**: プロジェクトルートに `doc-drift-report.md` を生成
+   - **コンソール出力**: レポートをそのまま会話に出力
 2. レポート形式は `templates/report.md` を参照
 3. 要約をユーザーに報告する
 

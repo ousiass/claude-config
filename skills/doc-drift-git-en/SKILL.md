@@ -63,6 +63,7 @@ Identify code changes that need doc updates. Check criteria in `references/check
 1. Confirm output destination with `AskUserQuestion`:
    - **GitHub Issue** (recommended): `review: Doc drift report (<branch> -> <comparison>, <YYYY-MM-DD>)`
    - **Local MD**: `doc-drift-git-report.md`
+   - **Console output**: Print the report directly in the conversation
 2. Use report format from `templates/report.md`
 3. Report summary to user
 

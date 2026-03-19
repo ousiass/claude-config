@@ -47,6 +47,7 @@ Cross-reference each document against check criteria (see `references/check-crit
 1. Confirm output destination with `AskUserQuestion`:
    - **GitHub Issue** (recommended): Title `review: Doc drift report (<branch>, <YYYY-MM-DD>)`
    - **Local MD file**: `doc-drift-report.md`
+   - **Console output**: Print the report directly in the conversation
 2. Use report format from `templates/report.md`
 3. Report summary to user
 

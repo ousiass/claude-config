@@ -61,6 +61,7 @@ PR 作成前にドキュメントの更新漏れがないか確認するのに�
 1. `AskUserQuestion` で出力先確認:
    - **GitHub Issue**（推奨）: `review: ドキュメント乖離レポート(<ブランチ名> → <比較先>, <YYYY-MM-DD>)`
    - **ローカル MD**: `doc-drift-git-report.md`
+   - **コンソール出力**: レポートをそのまま会話に出力
 2. レポート形式は `templates/report.md` を参照
 3. 要約をユーザーに報告
 
