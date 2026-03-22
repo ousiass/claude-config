@@ -20,9 +20,9 @@ Actively discuss with the user to resolve unknowns, presenting reference ideas t
 - No arguments: Create a full set of design documents for a new project
 - Path specified: Append/update to an existing specification document
 
-## Documents to Generate
+## Documents to Generate (Default Paths)
 
-| Document | File | Content |
+| Document | Default File | Content |
 |----------|------|---------|
 | **Functional requirements** | `docs/requirements/functional.md` | Use cases, feature list, screen/operation flows |
 | **Non-functional requirements** | `docs/requirements/non-functional.md` | Performance, security, availability, scalability |
@@ -31,9 +31,31 @@ Actively discuss with the user to resolve unknowns, presenting reference ideas t
 | **API specification** | `docs/api/endpoints.md` | Endpoints, request/response, auth, errors |
 | **Component design** | `docs/components/overview.md` | Component breakdown, responsibilities, dependencies, interfaces |
 
-- Follow project conventions if they exist. Match existing spec structure when specs already exist
+- **These are default paths. If an existing spec directory is found, use that instead (see "Discovery" below)**
 
 ## Phase 1: Assess Current State and Decide Direction
+
+#### 1-0: Discover Existing Specs (Required — Run First)
+
+**If a path is specified as argument:**
+- Read the file/directory at that path directly
+- Also check related files in the same directory
+
+**If no argument:**
+Search for existing specs using Glob:
+```
+**/spec/**/*.md
+**/specs/**/*.md
+**/docs/**/*.md
+**/specifications/**/*.md
+**/design/**/*.md
+```
+
+**Based on discovery results:**
+- **Existing specs found**: Record the directory structure and file paths as the base map. Place new documents within this structure. Do NOT use default paths
+- **No specs found**: Use default paths (`docs/` subtree)
+
+**Important: Always Read discovered spec files to understand current specifications before proceeding.**
 
 #### Output Destination
 
@@ -52,7 +74,7 @@ Confirm with `AskUserQuestion`:
 5. Create tasks with TaskCreate
 
 #### For Appending to Existing Specs
-1. Read existing specs and understand current specifications
+1. **Using 1-0 discovery results**, Read all existing spec files to understand current specifications
 2. Interview about additions
 3. Present existing feature reuse/change proposals
 4. Agree on direction
@@ -97,3 +119,5 @@ Confirm with `AskUserQuestion`:
 - When appending to existing specs, prioritize reuse/modification of existing features
 - Always add revision history when updating documents
 - Track progress with TaskCreate/TaskUpdate
+- **If an existing spec directory is found, use those paths — not the defaults (`docs/`). Never create new subdirectories when existing ones already serve the same purpose**
+- **When updating existing files, use Edit to modify them in place. Never create duplicate files in a different location**
