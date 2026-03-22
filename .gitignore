@@ -3,8 +3,10 @@
 
 # ローカル設定
 settings.local.json
+policy-limits.json
 
 # セッション・キャッシュ・一時データ
+sessions/
 history.jsonl
 stats-cache.json
 cache/
