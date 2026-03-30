@@ -20,6 +20,7 @@
 - type は英語（feat, fix, update, refactor, docs, test など）
 - 説明は日本語で簡潔に書く
 - 例: `feat: ユーザー認証機能を追加`, `fix: ログイン時のエラーを修正`
+- `git commit` / `git push` で `--no-verify` を使わないこと。pre-commit および pre-push フックは必ず通す。フックが失敗した場合はスキップせず、原因を調査・修正する。
 
 ## Libraries
 - Prefer using well-known, widely adopted libraries when they simplify the solution, reduce risk, or improve maintainability.
