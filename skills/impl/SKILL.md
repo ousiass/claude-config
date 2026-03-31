@@ -53,10 +53,15 @@ user-invocable: true
 #### 2-2: Develop
 - `develop` エージェントで実装（テスト含む）
 - 最小限の変更で要件を満たす
+- **本番動作するコードを書くこと。以下は実装完了とみなさない：**
+  - モック・スタブ・ダミーだけのテスト（実コードなし）
+  - `TODO`, `NotImplementedError`, `pass`, `throw new Error("not implemented")` で埋めた関数
+  - インターフェース・型定義だけで中身がない実装
 
 #### 2-3: Review
 - `review` エージェントでコードレビュー
 - 要件適合、コード品質、テスト十分性を評価
+- **未実装チェック**: モック/スタブのみ、TODO/NotImplementedError、空の関数本体がないか確認
 
 #### 2-4: 改善サイクル
 - レビュー指摘あり → `develop` で修正 → `review` で再レビュー → 指摘なしまで繰り返す

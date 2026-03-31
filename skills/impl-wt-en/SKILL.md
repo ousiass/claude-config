@@ -62,11 +62,16 @@ Worktree-isolated version of `impl`. Implements without affecting the main worki
 - Implement (including tests) with the `develop` agent
 - Satisfy requirements with minimal changes
 - Include worktree path in prompt
+- **Write production-ready code. The following do NOT count as complete implementation:**
+  - Tests containing only mocks/stubs with no real code
+  - Functions filled with `TODO`, `NotImplementedError`, `pass`, or `throw new Error("not implemented")`
+  - Interface/type definitions only with no actual implementation
 
 #### 2-3: Review
 - Code review with the `review` agent
 - Evaluate requirement conformance, code quality, and test sufficiency
 - Include worktree path in prompt
+- **Incomplete implementation check**: Verify no mock/stub-only code, TODO/NotImplementedError placeholders, or empty function bodies
 
 #### 2-4: Improvement Cycle
 - If review issues found -> fix with `develop` -> re-review -> repeat until no issues
