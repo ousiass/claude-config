@@ -93,7 +93,7 @@ user-invocable: true
 4. `gh pr create --base <ベースブランチ>` でPRを作成
    - **ベースブランチはフェーズ1で記録した開始時のブランチを指定する。`main` や `master` にフォールバックしないこと。**
    - 不明な場合は `git log --oneline --graph HEAD...main` 等で分岐元を確認する
-   - Issue 指定時: タイトルに Issue 番号を含め、本文先頭に `Closes #<番号>` を記載
+   - Issue 指定時: タイトルに Issue 番号を含め、PR作成後に `gh pr edit <PR番号> --add-issue <Issue URL>` でリンクする（Closes は使わない）
    - PR本文: 変更サマリー + 手動チェックリスト（`templates/pr-checklist.md` を参照）
 5. 実装サマリーと **worktree パス** をユーザーに報告する
 

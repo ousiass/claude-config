@@ -82,7 +82,7 @@ Worktree-isolated version of `bug-fix`. Fixes bugs without affecting the main wo
 2. Create PR with `gh pr create --base <base-branch>`
    - **Use the base branch recorded in Phase 1. Never fall back to `main` or `master`.**
    - If unclear, check fork point with `git log --oneline --graph HEAD...main`
-   - With Issue: Include Issue number in title, link with `Closes #<number>`
+   - With Issue: Include Issue number in title, then link via `gh pr edit <PR#> --add-issue <Issue URL>` after creation (do not use Closes keyword)
    - PR body: Bug symptoms, cause, fix summary + manual checklist (see `templates/pr-checklist.md`)
 3. Report fix summary and **worktree path** to user
 

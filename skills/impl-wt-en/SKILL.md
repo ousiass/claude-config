@@ -95,7 +95,7 @@ Worktree-isolated version of `impl`. Implements without affecting the main worki
 4. Create PR with `gh pr create --base <base-branch>`
    - **Use the base branch recorded in Phase 1. Never fall back to `main` or `master`.**
    - If unclear, check fork point with `git log --oneline --graph HEAD...main`
-   - With Issue: Include Issue number in title, add `Closes #<number>` at body start
+   - With Issue: Include Issue number in title, then link via `gh pr edit <PR#> --add-issue <Issue URL>` after creation (do not use Closes keyword)
    - PR body: Change summary + manual checklist (see `templates/pr-checklist.md`)
 5. Report implementation summary and **worktree path** to user
 
