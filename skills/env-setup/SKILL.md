@@ -1,6 +1,6 @@
 ---
 name: env-setup
-description: 仕様書に環境構築セクション（CI, lint, format, linterly, hooks）を追加する
+description: 仕様書に環境構築セクション（CI, lint, format, linterly, hooks, Swagger）を追加する
 user-invocable: true
 ---
 
@@ -47,6 +47,8 @@ user-invocable: true
 - ESLint / Biome / Prettier / `.linterly.yml` 等（既存lint/format設定）
 - `lefthook.yml` / `.husky/` （既存hooks）
 - `Makefile` / `Taskfile.yml` / `justfile`（既存タスクランナー）
+- `swagger.yaml` / `openapi.yaml` / `docs/swagger/` 等（既存Swagger/OpenAPI設定）
+- Swagger関連の依存（swag, swaggo, swagger-jsdoc, springdoc 等）
 
 ### 1-3: 技術スタック整理
 
@@ -106,7 +108,31 @@ user-invocable: true
 - pre-commit: lint + format + linterly
 - pre-push: test
 
-### 2-6: ディレクトリ構造
+### 2-6: Swagger/OpenAPI
+
+APIサーバーを含むプロジェクトでのみ提示する。仕様書にAPIエンドポイントの記載がなければスキップ。
+
+**推奨構成を提示して確認:**
+
+- **Swagger生成ツール（技術スタックに応じた推奨）:**
+
+| 言語/FW | 推奨ツール | アノテーション形式 |
+|---------|-----------|-----------------|
+| Go (Echo/Gin/Chi等) | swaggo/swag | Goコメントアノテーション |
+| Node.js (Express) | swagger-jsdoc + swagger-ui-express | JSDocコメント |
+| Node.js (NestJS) | @nestjs/swagger | デコレータ |
+| Python (FastAPI) | 組み込み（自動生成） | Pydanticモデル |
+| Python (Django) | drf-spectacular | デコレータ |
+| Java (Spring Boot) | springdoc-openapi | アノテーション |
+
+- **Swagger UIエンドポイント:** `/swagger` 固定
+- **環境変数制御:** `SWAGGER_ENABLED` (`true`/`false`) で切り替え
+  - 開発・ステージング: `true`（デフォルト）
+  - 本番: `false`
+- **生成コマンド:** `swag init` 等をタスクランナーやMakefileに登録するか確認
+- **CI連携:** Swagger specの生成忘れを検知するCIステップを追加するか確認（`swag init && git diff --exit-code` パターン等）
+
+### 2-7: ディレクトリ構造
 
 仕様書のアーキテクチャ設計にディレクトリ構造が記載されていれば、そこへのリンクを貼る。
 なければ簡易的なディレクトリ構成をヒアリングして記載する。
@@ -141,6 +167,13 @@ user-invocable: true
 
 ## Git Hooks
 <!-- ツール、フック構成 -->
+
+## Swagger/OpenAPI
+<!-- APIプロジェクトの場合のみ記載 -->
+<!-- 生成ツール、アノテーション方針、生成コマンド -->
+<!-- Swagger UIエンドポイント: /swagger -->
+<!-- 環境変数 SWAGGER_ENABLED による有効/無効切り替え -->
+<!-- CI連携（spec生成忘れ検知） -->
 
 ## 改訂履歴
 ```
