@@ -12,6 +12,42 @@ HTMX + Atomic Design + Lit + Templ によるサーバー内蔵型フロントエ
 - テンプレートは Atomic Design で構造化する
 - クライアント側の状態・ロジックは最小限に留める。状態はサーバーが持つ
 - 各技術は疎結合に組み合わせる。特定技術への依存を最小化し、差し替え可能に保つ
+- **HATEOAS**: サーバーのレスポンスに含まれるハイパーメディアコントロール（リンク、フォーム、ボタン）が、次に何ができるかをクライアントに伝える。クライアントは URL をハードコードしない
+
+### 状態駆動レンダリング（HATEOAS 原則）
+
+サーバーが現在の状態と権限に基づいて、**利用可能なアクションのみを HTML に含める**。クライアントは「UIの存在 ＝ 操作可能」と判断する。
+
+- ボタンが見えるなら押せる。見えないなら存在しない
+- `hidden` や `disabled` で操作を隠すのではなく、**レンダリングしない**のが正しい
+- 権限判定はサーバー（Go）側で行い、テンプレートに結果を渡す
+
+```go
+// ✅ サーバーが権限に基づきアクションを出し分ける
+templ TaskRow(task domain.Task, perms Permissions) {
+    <tr id={ fmt.Sprintf("task-%s", task.ID) }>
+        <td>{ task.Title }</td>
+        <td>
+            if perms.CanUpdateStatus {
+                <button hx-post={ fmt.Sprintf("/tasks/%s/status", task.ID) }
+                        hx-target={ fmt.Sprintf("#task-%s", task.ID) }
+                        hx-swap="outerHTML">
+                    完了にする
+                </button>
+            }
+            if perms.CanDelete {
+                <button hx-delete={ fmt.Sprintf("/tasks/%s", task.ID) }
+                        hx-target={ fmt.Sprintf("#task-%s", task.ID) }
+                        hx-swap="outerHTML">
+                    削除
+                </button>
+            }
+        </td>
+    </tr>
+}
+```
+
+この原則は Templ テンプレートだけでなく、Lit コンポーネントへの属性渡しにも適用する（後述「Lit への URL・権限注入」）。
 
 ## 技術スタック
 
@@ -363,8 +399,9 @@ HTMX で十分なインタラクション（フォーム、リスト更新、モ
 ```typescript
 @customElement('my-feature-name')
 export class MyFeatureName extends LitElement {
-  // HTML属性からデータを受け取る
-  @property({ type: String }) entityId = '';
+  // サーバーから注入される URL・設定（HATEOAS: クライアントは URL をハードコードしない）
+  @property({ type: String, attribute: 'api-url' }) apiUrl = '';
+  @property({ type: String, attribute: 'ws-url' }) wsUrl = '';
   @property({ type: Boolean }) readonly = false;
 
   // コンポーネント内部状態
@@ -376,8 +413,33 @@ export class MyFeatureName extends LitElement {
   // ライフサイクル
   connectedCallback() { super.connectedCallback(); this.load(); }
   disconnectedCallback() { super.disconnectedCallback(); this.cleanup(); }
+
+  private async load() {
+    // サーバーから受け取った URL を使う
+    this.data = await api.get(this.apiUrl);
+  }
 }
 ```
+
+### Lit への URL・権限注入（HATEOAS 原則）
+
+Lit コンポーネントは API パスをハードコードしない。サーバー（Templ テンプレート）が URL と権限を HTML 属性で注入する。
+
+```go
+// ✅ サーバーが URL と権限を提供
+templ DocumentEditor(doc domain.Document, perms Permissions) {
+    <app-doc-editor
+        api-url={ fmt.Sprintf("/api/v1/documents/%s", doc.ID) }
+        ws-url={ fmt.Sprintf("/ws/documents/%s", doc.ID) }
+        readonly?={ !perms.CanEdit }>
+    </app-doc-editor>
+}
+```
+
+この方式の利点:
+- URL の変更がサーバー側だけで完結する
+- 権限はサーバーが判定し、`readonly` 等の属性で Lit に伝える（HATEOAS: サーバーが操作可否を制御）
+- Lit は「サーバーに渡された URL」にアクセスするだけで、ルーティング知識を持たない
 
 ### 特徴的パターン
 
@@ -385,7 +447,7 @@ export class MyFeatureName extends LitElement {
 - **読み取り専用モード**: 全エディタが `readonly` プロパティで切替可能
 - **Shadow DOM**: スタイルのカプセル化。外部 CSS の影響を受けない
 - **イベント通信**: コンポーネント間は CustomEvent で疎結合に通信
-- **自己完結**: 各 Lit コンポーネントは `connectedCallback` でデータを取得し、内部で状態管理する。外部からの状態注入に依存しない
+- **自己完結**: 各 Lit コンポーネントは `connectedCallback` でサーバーから注入された URL を使いデータを取得し、内部で状態管理する
 
 ## エラーハンドリング
 
@@ -449,7 +511,8 @@ Lit は JSON API を使うため、自前で try/catch してコンポーネン�
 ```typescript
 private async load() {
   try {
-    this.data = await api.get(`/api/v1/documents/${this.entityId}`);
+    // サーバーから注入された URL を使う（HATEOAS: URL をハードコードしない）
+    this.data = await api.get(this.apiUrl);
     this.error = null;
   } catch (e) {
     this.error = e instanceof ApiError ? e.message : '読み込みに失敗しました';
@@ -530,6 +593,12 @@ func TestTaskList_HTMXRequest(t *testing.T) {
 ## Huma API パターン
 
 Huma で登録する JSON API には適切な Input/Output 構造体を定義する。
+
+### HATEOAS と JSON API の位置付け
+
+HALT における HATEOAS の主戦場は HTMX（HTML レスポンス）であり、JSON API ではない。JSON API に `_links` 等のハイパーメディアリンクは含めない（ミニマリズム優先）。
+
+代わりに、Huma が自動生成する **OpenAPI 3.1 スペック**（`/api/v1/openapi.json`）が API の発見メカニズムとして機能する。Lit コンポーネントはサーバーから HTML 属性で注入された URL を使うため、クライアント側で URL をハードコードする必要はない。
 
 ```go
 type CreateTaskInput struct {

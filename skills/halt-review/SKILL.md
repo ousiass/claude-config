@@ -38,6 +38,7 @@ HALTアーキテクチャ（HTMX + Atomic Design + Lit + Templ + Huma）で構�
 - ルーティング整合性: `references/check-routing.md`
 - Templ ↔ HTMX 接続: `references/check-templ-htmx.md`
 - クロスレイヤー整合性: `references/check-cross-layer.md`
+- HATEOAS 準拠: `references/check-hateoas.md`
 - Atomic Design 構造: `references/check-atomic.md`
 - Lit Web Components: `references/check-lit.md`
 - Go レイヤードアーキテクチャ: `references/check-backend-layer.md`
@@ -58,7 +59,7 @@ HALTアーキテクチャ（HTMX + Atomic Design + Lit + Templ + Huma）で構�
 | 重大度 | 基準 |
 |--------|------|
 | Critical | ルーティング不整合（存在しないパスへのHTMXリクエスト）、Templ↔Lit属性バインディング不一致、静的アセットパス不一致、セキュリティ欠陥（CSRF未適用） |
-| Important | HALT設計思想の違反（HTMLを返すべき箇所でJSON返却、不要なWeb Component使用）、Atomic Design/Goレイヤーの依存方向逆転、Huma登録漏れ・I/O構造体欠如、Templ生成ファイルの鮮度 |
+| Important | HATEOAS違反（hidden/disabledでアクション制御、Lit URL ハードコード）、HALT設計思想の違反（HTMLを返すべき箇所でJSON返却、不要なWeb Component使用）、Atomic Design/Goレイヤーの依存方向逆転、Huma登録漏れ・I/O構造体欠如、Templ生成ファイルの鮮度 |
 | Suggestion | 命名規則の不統一、コンポーネント配置の最適化、hx-swap戦略の改善 |
 | Minor | コード整理、スタイル統一、軽微な命名改善 |
 

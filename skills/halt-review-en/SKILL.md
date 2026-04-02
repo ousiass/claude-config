@@ -40,6 +40,7 @@ Check category details in:
 - Routing consistency: `references/check-routing.md`
 - Templ ↔ HTMX connection: `references/check-templ-htmx.md`
 - Cross-layer consistency: `references/check-cross-layer.md`
+- HATEOAS compliance: `references/check-hateoas.md`
 - Atomic Design structure: `references/check-atomic.md`
 - Lit Web Components: `references/check-lit.md`
 - Go layered architecture: `references/check-backend-layer.md`
@@ -60,7 +61,7 @@ Check category details in:
 | Severity | Criteria |
 |----------|----------|
 | Critical | Routing mismatch (HTMX request to nonexistent path), Templ↔Lit attribute binding mismatch, static asset path mismatch, security flaw (missing CSRF) |
-| Important | HALT design violation (JSON response where HTML expected, unnecessary Web Component), Atomic Design/Go layer dependency inversion, missing Huma registration/I/O structs, stale Templ generation |
+| Important | HATEOAS violation (hidden/disabled action control, Lit URL hardcoding), HALT design violation (JSON response where HTML expected, unnecessary Web Component), Atomic Design/Go layer dependency inversion, missing Huma registration/I/O structs, stale Templ generation |
 | Suggestion | Naming inconsistency, component placement optimization, hx-swap strategy improvement |
 | Minor | Code organization, style unification, trivial naming improvement |
 
