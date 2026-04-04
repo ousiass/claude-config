@@ -114,21 +114,32 @@ APIサーバーを含むプロジェクトでのみ提示する。仕様書にAP
 
 **推奨構成を提示して確認:**
 
-- **Swagger生成ツール（技術スタックに応じた推奨）:**
+#### Spec生成ツール（技術スタックに応じた推奨）
 
 | 言語/FW | 推奨ツール | アノテーション形式 |
 |---------|-----------|-----------------|
 | Go (Echo/Gin/Chi等) | swaggo/swag | Goコメントアノテーション |
-| Node.js (Express) | swagger-jsdoc + swagger-ui-express | JSDocコメント |
+| Node.js (Express) | swagger-jsdoc | JSDocコメント |
 | Node.js (NestJS) | @nestjs/swagger | デコレータ |
 | Python (FastAPI) | 組み込み（自動生成） | Pydanticモデル |
 | Python (Django) | drf-spectacular | デコレータ |
 | Java (Spring Boot) | springdoc-openapi | アノテーション |
 
-- **Swagger UIエンドポイント:** `/swagger` 固定
+#### UI: Stoplight Elements（全言語共通）
+
+Swagger UIの代わりに **Stoplight Elements** を推奨する。言語・FWに依存せず統一的なAPIドキュメントUIを提供できる。
+
+- **パッケージ:** `@stoplight/elements`（npm）または CDN（`unpkg.com/@stoplight/elements`）
+- **組み込み方式:** サーバーが生成したOpenAPI specファイル（JSON/YAML）を読み込むHTMLページを配置
+  - 静的HTMLファイル1枚で完結（Web Component `<elements-api>` を使用）
+  - サーバー側のUI用ミドルウェアが不要になる
+- **Swagger UIエンドポイント:** `/swagger` 固定（静的HTMLを返す）
 - **環境変数制御:** `SWAGGER_ENABLED` (`true`/`false`) で切り替え
   - 開発・ステージング: `true`（デフォルト）
   - 本番: `false`
+
+#### 運用
+
 - **生成コマンド:** `swag init` 等をタスクランナーやMakefileに登録するか確認
 - **CI連携:** Swagger specの生成忘れを検知するCIステップを追加するか確認（`swag init && git diff --exit-code` パターン等）
 
@@ -170,7 +181,8 @@ APIサーバーを含むプロジェクトでのみ提示する。仕様書にAP
 
 ## Swagger/OpenAPI
 <!-- APIプロジェクトの場合のみ記載 -->
-<!-- 生成ツール、アノテーション方針、生成コマンド -->
+<!-- Spec生成ツール、アノテーション方針、生成コマンド -->
+<!-- UI: Stoplight Elements（全言語共通） -->
 <!-- Swagger UIエンドポイント: /swagger -->
 <!-- 環境変数 SWAGGER_ENABLED による有効/無効切り替え -->
 <!-- CI連携（spec生成忘れ検知） -->
