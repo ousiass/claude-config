@@ -92,7 +92,7 @@ user-invocable: true
 
 ### 2-4: Linterly
 
-行数管理ツール。パッケージは `@linterly/cli`（npm）。詳細は `references/linterly.md` 参照。
+行数管理ツール。詳細は `references/linterly.md` 参照。
 
 **方針:**
 - `rules.max_lines_per_file` / `rules.max_lines_per_directory` はデフォルト値（300/2000）を使う。yml にはコメントアウト状態で記載し「特別な理由がない限り変更しない」旨を注記する
