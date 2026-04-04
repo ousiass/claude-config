@@ -84,7 +84,7 @@ user-invocable: true
 1. 検出結果を重大度別に集計する（重大度基準は `references/check-criteria.md`）
 2. `templates/report.md` の形式でレポートを生成
 3. `AskUserQuestion` で出力先をユーザーに確認する：
-   - **GitHub Issue に作成**（推奨）: 乖離1件につき1 Issue を作成
+   - **GitHub Issue に作成**（推奨）
    - **ローカル MD ファイルに保存**: プロジェクトルートに `spec-audit-report.md` を生成
    - **コンソール出力**: レポートをそのまま会話に出力
 
@@ -92,20 +92,20 @@ user-invocable: true
 
 出力先で「GitHub Issue に作成」が選ばれた場合：
 
-1. 重複チェック: `gh issue list --state open --search "<要約>"` で既存 Issue を検索
-2. 重複あり → ユーザーに報告し、スキップ or 新規作成か確認
-3. Issue 本文は `templates/issue.md` を参照
-4. 全件の一覧（タイトル + 重大度）をまとめて表示し、`AskUserQuestion` で承認モードを確認：
-   - **一括承認**: 確認はこの1回のみ。承認後は全件を `gh issue create` で連続作成する。**個別のプレビューや確認は挟まない**
-   - **1件ずつ確認**: 各 Issue をプレビューして承認/スキップ
+1. 全件の一覧（タイトル + 重大度）をまとめて表示する
+2. `AskUserQuestion` で Issue の作成方式を確認：
+   - **まとめて1つの Issue**: 全検出結果をチェックリスト形式で1つの Issue にまとめる（推奨）
+   - **個別 Issue**: 検出結果1件につき1 Issue を作成する
+3. 重複チェック: `gh issue list --state open --search "<要約>"` で既存 Issue を検索。重複あり → スキップ or 新規作成か確認
+4. Issue 本文は `templates/issue.md` を参照
 5. `gh issue create` で作成。ラベル: `spec-audit` + 重大度ラベル（`severity:critical`, `severity:high`, `severity:medium`, `severity:low`）
-6. 作成した Issue の URL 一覧をユーザーに報告
+6. 作成した Issue の URL をユーザーに報告
 
 ## ルール
 
 - 推測で乖離を報告しない。**実装コードを確認して裏付けを取る**
 - 乖離にはドキュメント側と実装側の**両方の箇所**を示す
 - コードを修正しない。成果物は Issue とレポートのみ
-- Issue 作成前に**必ず承認を得る**（一括承認の場合は一覧表示の1回のみ）
+- Issue 作成前に**必ず承認を得る**
 - `TaskCreate`/`TaskUpdate` で進捗を管理する
 - 検出件数が多い場合は重大度 🔴🟠 を優先し、🟡🟢 は省略可とする

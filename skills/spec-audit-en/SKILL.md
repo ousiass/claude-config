@@ -84,7 +84,7 @@ Refer to `references/check-criteria.md` for detection criteria.
 1. Aggregate results by severity (see `references/check-criteria.md`)
 2. Generate report using `templates/report.md` format
 3. Ask user via `AskUserQuestion` for output destination:
-   - **Create GitHub Issues** (Recommended): One Issue per gap
+   - **Create GitHub Issues** (Recommended)
    - **Save as local MD file**: Generate `spec-audit-report.md` at project root
    - **Console output**: Display report in conversation
 
@@ -92,20 +92,20 @@ Refer to `references/check-criteria.md` for detection criteria.
 
 When "Create GitHub Issues" is selected:
 
-1. Duplicate check: `gh issue list --state open --search "<summary>"` for existing Issues
-2. If duplicate found: report to user, ask to skip or create new
-3. Issue body follows `templates/issue.md`
-4. Show a summary list of all Issues (title + severity), then ask via `AskUserQuestion` for approval mode:
-   - **Approve all**: This is the only confirmation. After approval, create all Issues via `gh issue create` in sequence. **Do NOT show individual previews or ask for per-issue confirmation**
-   - **One by one**: Preview each Issue for approval/skip
+1. Show a summary list of all findings (title + severity)
+2. Ask via `AskUserQuestion` for Issue creation mode:
+   - **Single Issue** (Recommended): Combine all findings into one Issue with a checklist
+   - **Individual Issues**: Create one Issue per finding
+3. Duplicate check: `gh issue list --state open --search "<summary>"` for existing Issues. If duplicate found: ask to skip or create new
+4. Issue body follows `templates/issue.md`
 5. `gh issue create` with labels: `spec-audit` + severity label (`severity:critical`, `severity:high`, `severity:medium`, `severity:low`)
-6. Report created Issue URLs to user
+6. Report created Issue URL(s) to user
 
 ## Rules
 
 - Never report gaps based on speculation. **Verify against actual implementation code**
 - Show **both** document-side and implementation-side locations for every gap
 - Do not modify code. Deliverables are Issues and reports only
-- **Always get user approval** before creating Issues (for bulk approval, the summary list counts as the single confirmation)
+- **Always get user approval** before creating Issues
 - Track progress with `TaskCreate`/`TaskUpdate`
 - When many gaps are found, prioritize severity 🔴🟠; 🟡🟢 may be omitted
