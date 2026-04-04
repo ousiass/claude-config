@@ -95,10 +95,10 @@ user-invocable: true
 1. 重複チェック: `gh issue list --state open --search "<要約>"` で既存 Issue を検索
 2. 重複あり → ユーザーに報告し、スキップ or 新規作成か確認
 3. Issue 本文は `templates/issue.md` を参照
-4. `AskUserQuestion` で Issue 作成前にプレビューを表示し承認を得る：
-   - **一括承認**: 全件まとめて作成
+4. 全件の一覧（タイトル + 重大度）をまとめて表示し、`AskUserQuestion` で承認モードを確認：
+   - **一括承認**: 確認はこの1回のみ。承認後は全件を `gh issue create` で連続作成する。**個別のプレビューや確認は挟まない**
    - **1件ずつ確認**: 各 Issue をプレビューして承認/スキップ
-5. `gh issue create` で作成。ラベル: `implementation-gap` + 重大度ラベル（`severity:critical`, `severity:high`, `severity:medium`, `severity:low`）
+5. `gh issue create` で作成。ラベル: `spec-audit` + 重大度ラベル（`severity:critical`, `severity:high`, `severity:medium`, `severity:low`）
 6. 作成した Issue の URL 一覧をユーザーに報告
 
 ## ルール
@@ -106,6 +106,6 @@ user-invocable: true
 - 推測で乖離を報告しない。**実装コードを確認して裏付けを取る**
 - 乖離にはドキュメント側と実装側の**両方の箇所**を示す
 - コードを修正しない。成果物は Issue とレポートのみ
-- Issue 作成前に**必ずプレビューしてユーザー承認を得る**
+- Issue 作成前に**必ず承認を得る**（一括承認の場合は一覧表示の1回のみ）
 - `TaskCreate`/`TaskUpdate` で進捗を管理する
 - 検出件数が多い場合は重大度 🔴🟠 を優先し、🟡🟢 は省略可とする

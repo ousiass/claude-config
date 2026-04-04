@@ -95,10 +95,10 @@ When "Create GitHub Issues" is selected:
 1. Duplicate check: `gh issue list --state open --search "<summary>"` for existing Issues
 2. If duplicate found: report to user, ask to skip or create new
 3. Issue body follows `templates/issue.md`
-4. Show preview via `AskUserQuestion` and get approval:
-   - **Approve all**: Create all Issues at once
+4. Show a summary list of all Issues (title + severity), then ask via `AskUserQuestion` for approval mode:
+   - **Approve all**: This is the only confirmation. After approval, create all Issues via `gh issue create` in sequence. **Do NOT show individual previews or ask for per-issue confirmation**
    - **One by one**: Preview each Issue for approval/skip
-5. `gh issue create` with labels: `implementation-gap` + severity label (`severity:critical`, `severity:high`, `severity:medium`, `severity:low`)
+5. `gh issue create` with labels: `spec-audit` + severity label (`severity:critical`, `severity:high`, `severity:medium`, `severity:low`)
 6. Report created Issue URLs to user
 
 ## Rules
@@ -106,6 +106,6 @@ When "Create GitHub Issues" is selected:
 - Never report gaps based on speculation. **Verify against actual implementation code**
 - Show **both** document-side and implementation-side locations for every gap
 - Do not modify code. Deliverables are Issues and reports only
-- **Always preview and get user approval** before creating Issues
+- **Always get user approval** before creating Issues (for bulk approval, the summary list counts as the single confirmation)
 - Track progress with `TaskCreate`/`TaskUpdate`
 - When many gaps are found, prioritize severity 🔴🟠; 🟡🟢 may be omitted
