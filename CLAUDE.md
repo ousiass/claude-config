@@ -22,6 +22,11 @@
 - 例: `feat: ユーザー認証機能を追加`, `fix: ログイン時のエラーを修正`
 - `git commit` / `git push` で `--no-verify` を使わないこと。pre-commit および pre-push フックは必ず通す。フックが失敗した場合はスキップせず、原因を調査・修正する。
 
+## Git Merge
+- PR をマージする際は squash せず、マージコミット方式（merge commit）を使うこと。
+- `gh pr merge` を使う場合は `--merge` を明示する（`--squash` / `--rebase` は使わない）。
+- ローカルで `git merge` する場合も fast-forward ではなく `--no-ff` でマージコミットを残す。
+
 ## Libraries
 - Prefer using well-known, widely adopted libraries when they simplify the solution, reduce risk, or improve maintainability.
 - Do not re-implement common, well-solved functionality that a major library already provides (e.g., parsing, validation, date/time handling, HTTP clients), unless there is a clear constraint (performance, bundle size, security policy, dependency restrictions).
