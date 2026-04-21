@@ -19,7 +19,7 @@ snippets階層をAtomic Design（atoms / molecules / organisms）で構造化し
 
 - 入力: Stitchの生zip（`stitch/p_XXX/code.html` 形式、`/stitch-deploy` と同じ構造）
 - 出力: `shopify theme dev` / `shopify theme push` でそのまま動作するテーマディレクトリ
-- CSS: Tailwind CDNを `theme.liquid` に置いて維持する（再コンパイルしない）
+- CSS: Tailwind CLIで `assets/base.css` を**事前コンパイル**（CDNは使わない、Shopify公式推奨のasset_url配信）
 - `code.html` のHTML中身は、Liquid化に必要な箇所以外は極力変更しない
 - ユーザー確認なしに既存ファイルを上書きしない
 
@@ -27,12 +27,17 @@ snippets階層をAtomic Design（atoms / molecules / organisms）で構造化し
 
 ```
 shopify-theme/
-├── assets/                     # screen.png 等を配置
+├── assets/
+│   ├── base.css                # Tailwind CLIで事前コンパイル（CDN不使用）
+│   ├── global.js               # 共通JS（必要なら）
+│   └── mock-*.{png,jpg,svg,webp}  # Stitchの画像をimage_pickerのデフォルトとして同梱
+├── blocks/                     # OS 2.0 theme blocks（section横断で再利用）
+│   └── *.liquid
 ├── config/
 │   ├── settings_schema.json
 │   └── settings_data.json
 ├── layout/
-│   └── theme.liquid            # Tailwind CDN + 共通head
+│   └── theme.liquid            # asset_urlでbase.css読込 + 共通head
 ├── sections/
 │   ├── header.liquid
 │   ├── footer.liquid
@@ -152,9 +157,40 @@ Shopify標準9種（`index`, `product`, `collection`, `cart`, `page`, `blog`, `a
 
 #### 4-1. layout/theme.liquid
 
-- Stitchの共通`<head>`（font, meta等）を移植
-- Tailwind CDN `<script src="https://cdn.tailwindcss.com"></script>` を追加
-- `{{ content_for_header }}`, `{% section 'header' %}`, `{{ content_for_layout }}`, `{% section 'footer' %}` を配置
+Shopify Dawnを参考にした標準構造を生成：
+
+```liquid
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+    <title>{{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+  </head>
+  <body>
+    {% section 'header' %}
+    <main id="MainContent" role="main">{{ content_for_layout }}</main>
+    {% section 'footer' %}
+    <script src="{{ 'global.js' | asset_url }}" defer></script>
+  </body>
+</html>
+```
+
+- `{{ content_for_header }}` は**必ず `<head>` 内**に置く（App埋め込み・analytics用）
+- Stitchの共通`<head>`（font等のlink）は `preconnect` を残しつつ移植
+- 元のCSSファイルリンク（`<link rel="stylesheet">`）は削除
+- インラインスクリプト・`<script src>` は section 内の `{% javascript %}` または `assets/*.js` + `script_tag` に移す
 
 #### 4-2. snippets/ の生成
 
@@ -194,11 +230,56 @@ Shopify標準9種（`index`, `product`, `collection`, `cart`, `page`, `blog`, `a
 |---------|--------|-------------|
 | プレーンテキスト（見出し、段落） | `{{ section.settings.xxx }}` | `text` / `textarea` |
 | リッチテキスト（リンク含む段落） | `{{ section.settings.xxx }}` | `richtext` |
-| 画像 | `{{ section.settings.image \| image_url: width: 800 \| image_tag }}` | `image_picker` |
+| 画像 | 下記「画像変換テンプレート」参照 | `image_picker` |
 | CTAボタン（テキスト＋URL） | setting 2つ（`cta_label`, `cta_url`） | `text`, `url` |
 | リスト状の繰り返し（特徴、実績、FAQ等） | `{% for block in section.blocks %}` | blocks配列で定義 |
 
 schemaのpresetsも1つ入れ、テーマエディタからsection追加できるようにする。
+
+##### 画像変換テンプレート（Stitch画像をデフォルトに）
+
+Stitchの`<img src="...">`（picsum.photos / placehold.co / 実アセット）は以下のパターンに置換：
+
+```liquid
+{%- assign img = section.settings.hero_image -%}
+{%- if img != blank -%}
+  {{ img | image_url: width: 1600 | image_tag:
+       loading: 'lazy',
+       widths: '400, 600, 800, 1200, 1600',
+       sizes: '(min-width: 750px) 50vw, 100vw',
+       alt: section.settings.hero_image_alt | default: img.alt }}
+{%- else -%}
+  <img src="{{ 'mock-hero.jpg' | asset_url }}"
+       alt="{{ section.settings.hero_image_alt | default: '' }}"
+       loading="lazy" width="1600" height="900">
+{%- endif -%}
+```
+
+- `image_picker`は`default`を持てない仕様なので、Stitch側の画像（picsum.photos / placehold.co / ダウンロード済アセット）を `assets/mock-{section}-{slug}.{ext}` として同梱し、`{% if settings.image %}...{% else %}{{ 'mock-*.ext' | asset_url }}{% endif %}` のフォールバックで表示する
+- LCP対象（1枚目のhero等）は `loading: 'lazy'` を外し、`fetchpriority: 'high'` と `preload` を検討
+- `width` / `height` 属性は元HTMLから取得（CLS対策。picsum.photosの場合はURLのwxhから推定）
+- `alt`は別settingで編集可能にする（画像とペアで `image_alt` setting を置く）
+
+##### section-scoped アセット（Shopify標準）
+
+section固有の動的スタイル・スクリプトは `{% stylesheet %}` / `{% javascript %}` で section 内に埋める（DawnのイディオムでTheme Checkも推奨）：
+
+```liquid
+{% schema %}{...}{% endschema %}
+
+{% stylesheet %}
+  /* Tailwindで表現できないCSS変数・動的背景等のみここに書く */
+  .hero--section-{{ section.id }} { --hero-overlay: {{ section.settings.overlay_color }}; }
+{% endstylesheet %}
+
+{% javascript %}
+  /* section 初期化ロジック。Shopifyが自動でdeferして結合する */
+  customElements.define('hero-section', class extends HTMLElement { ... });
+{% endjavascript %}
+```
+
+- Tailwindユーティリティで表現できるものは `{% stylesheet %}` に書かない（重複になる）
+- `{% javascript %}` は `assets/global.js` より**優先**してsection単位で使う（Shopifyが結合＆最適化）
 
 #### 4-4. 商品・コレクションsectionのLiquid化
 
@@ -207,7 +288,7 @@ schemaのpresetsも1つ入れ、テーマエディタからsection追加でき�
 - 商品リスト → `{% for product in collection.products %}`
 - 商品タイトル → `{{ product.title }}`
 - 商品価格 → `{{ product.price | money }}`
-- 商品画像 → `{{ product.featured_image | image_url: width: 600 | image_tag }}`
+- 商品画像 → `{{ product.featured_image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '300, 600, 900, 1200', sizes: '(min-width: 750px) 33vw, 100vw' }}`
 - 商品リンク → `{{ product.url }}`
 - 商品説明 → `{{ product.description }}`
 - 商品フォーム → `{% form 'product', product %}...{% endform %}`
@@ -229,12 +310,65 @@ Shopify OS 2.0 JSON形式。該当する `main-{template}` section を参照：
 
 Phase 2で決めた代替テンプレート（例: `page.about.json`）も同様に生成。
 
-#### 4-6. config/, locales/, assets/
+#### 4-6. blocks/（theme blocks, OS 2.0）
 
-- `config/settings_schema.json`: `theme_info` のみ最小構成
+複数section間で再利用したいorganismは **theme block** として切り出す（OS 2.0の新機能、Dawn 15+が採用）：
+
+- `blocks/product-card.liquid` のようにtop-level `blocks/` ディレクトリに配置
+- section schemaの `blocks` 配列に `{"type": "@theme"}` or `{"type": "@app"}` を含めるとテーマエディタから任意のtheme blockを追加可能
+- section内 `blocks` でしか使わないものは theme block にしない（section local blockとして残す）
+
+```liquid
+{%- comment -%} blocks/product-card.liquid {%- endcomment -%}
+<div {{ block.shopify_attributes }}>
+  {% render 'molecules/product-card', product: block.settings.product %}
+</div>
+{% schema %}
+{
+  "name": "Product card",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product" }
+  ]
+}
+{% endschema %}
+```
+
+Phase 3のorganism選定時、ユーザーに「このorganismをtheme blockにするか」を確認する。
+
+#### 4-7. config/, locales/, assets/
+
+- `config/settings_schema.json`: `theme_info` と favicon / color scheme 等のグローバル設定
 - `config/settings_data.json`: `{"current": {}}`
-- `locales/en.default.json`: `{}`（空。将来の翻訳用）
-- `assets/`: 各 `screen.png` を `assets/mock-{slug}.png` で配置（参考素材として。theme自体では使わない）
+- `locales/en.default.json`: 画面文言のキーを格納。section内のハードコード文字列は `{{ 'general.xxx' | t }}` に置換可能な箇所を抽出して収録
+- `locales/ja.json` など他言語は空の雛形を作成
+- `assets/base.css`: Phase 4-8でTailwind CLIが生成
+- `assets/global.js`: Stitchの共通`<script>`由来。無ければ空ファイルまたは省略
+- `assets/mock-*.{ext}`: Stitchの画像（`screen.png` / picsum.photos / placehold.coのキャプチャ含む）を `mock-{p_XXX}-{元ファイル名}` でコピー。image_pickerフォールバック用
+
+#### 4-8. Tailwind CSS コンパイル
+
+出力ディレクトリに対して Tailwind CLI を実行し `assets/base.css` を生成：
+
+```bash
+# 事前に一時ファイル作成
+cat > /tmp/base-input.css <<'CSS'
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+CSS
+
+# コンパイル実行
+npx tailwindcss@latest \
+  -i /tmp/base-input.css \
+  -o <出力先>/assets/base.css \
+  --content '<出力先>/**/*.liquid' \
+  --minify
+```
+
+- `--content` で生成済Liquidファイルをスキャンし、使用中のクラスだけをバンドル（JIT動作、通常30-80KB）
+- `npx` が使えない環境では bun / pnpm dlx で代替。利用可能なパッケージマネージャをユーザーに確認
+- Stitch独自のTailwind設定があれば `tailwind.config.js` を出力先に生成（元HTMLの `<script>tailwind.config = {...}</script>` から抽出）
+- コンパイル失敗時はエラーをそのまま表示し、手動で修正する案内を出す
 
 ### Phase 5: 自己チェック
 
@@ -245,6 +379,13 @@ Phase 2で決めた代替テンプレート（例: `page.about.json`）も同様
 - `{% render 'xxx/yyy' %}` の参照先snippetが全て存在するか
 - snippets間の引数名が渡し側と受け側で一致しているか
 - `assets/`, `config/`, `layout/`, `sections/`, `snippets/`, `templates/`, `locales/` が全て存在するか
+- `asset_url` が参照するファイルが `assets/` に実在するか
+- `assets/base.css` が生成されており空でないか（Tailwind CLIの結果）
+- モック画像フォールバックを使うsectionで、該当 `mock-*` ファイルが `assets/` に存在するか
+- `theme.liquid` の `<head>` に `{{ content_for_header }}` があるか
+- sectionの `{% stylesheet %}` 内に Tailwindユーティリティが書かれていないか（CSS重複検出）
+- `<script src="https://cdn...">` などの外部CDN参照が残っていないか
+- **`shopify theme check` を実行**（インストールされていれば）。ERROR レベルがあればその場で修正
 
 異常があれば修正してから次フェーズへ。
 
@@ -296,6 +437,37 @@ Phase 2で決めた代替テンプレート（例: `page.about.json`）も同様
    shopify theme push -u   # 未公開テーマとしてアップロード
    ```
 
+## Liquid 作法（Shopify標準）
+
+Phase 4の全generation phaseで以下を適用：
+
+- **whitespace制御**: Liquidタグが余分な空白を残さないよう、制御フロー系は `{%- ... -%}` を使う
+  ```liquid
+  {%- if section.settings.image != blank -%}
+    ...
+  {%- endif -%}
+  ```
+- **マルチライン`{% liquid %}`**: 3行以上のassign/ifが続くなら `{% liquid %}` でまとめる
+  ```liquid
+  {%- liquid
+    assign variant = block.settings.variant | default: 'primary'
+    assign href = block.settings.href
+    if variant == 'primary'
+      assign classes = 'bg-blue-600 text-white rounded px-4 py-2'
+    else
+      assign classes = 'border text-blue-600 rounded px-4 py-2'
+    endif
+  -%}
+  ```
+- **`blank`/`empty`判定**: 未定義値は `!= blank` で判定（`!= nil` ではない）
+- **`default`フィルター**: fallbackは `| default:` を優先（`{% if x %}{{ x }}{% else %}...{% endif %}` より簡潔）
+- **翻訳**: ハードコード文字列は避け、`{{ 'section.hero.cta_label' | t }}` と `locales/en.default.json` で管理。ただしユーザー編集前提のテキストは `section.settings` を優先（固定ラベルだけを `locales` へ）
+- **schemaの`t:`プレフィックス**: `{% schema %}` 内の `label` / `info` も翻訳可能：`"label": "t:sections.hero.settings.title.label"`
+- **`block.shopify_attributes`**: 各blockのルート要素に必ず `{{ block.shopify_attributes }}` を出力（テーマエディタのインスペクタ用）
+- **section id**: 複数配置される可能性があるので CSS class にも `section.id` を含める（`hero--{{ section.id }}` 等）
+- **App blocks対応**: 各sectionのblocksに `{"type": "@app"}` を入れ、アプリブロック配置を許容
+- **アクセシビリティ**: Stitch出力の `alt` / `aria-label` / `role` を保持。画像未設定時は `alt=""`（装飾画像扱い）
+
 ## ルール
 
 - ユーザー確認を取る箇所（必須）：
@@ -305,9 +477,10 @@ Phase 2で決めた代替テンプレート（例: `page.about.json`）も同様
   4. 出力先ディレクトリが既存の場合の上書き
   5. git push 直前の最終確認（ブランチ/リモート/コミット）
   6. main/masterブランチへの直pushを避けるかの確認
-- テキストは必ずsettings化する（ハードコードしない）
-- 画像は必ず`image_picker`化する（URLハードコードしない）
-- 独自CSSファイルは作らない。Tailwind CDNで表現する
+- テキストは必ずsettings化する（ハードコードしない）。固定ラベルは `locales/*.json` 経由
+- 画像は必ず`image_picker`化する（URLハードコードしない）。Stitchの画像は `assets/mock-*.{ext}` へコピーし `{% if settings.image %}...{% else %}asset_url{% endif %}` で参照
+- CSSは Tailwind CLI で `assets/base.css` にコンパイル。**CDN参照禁止**
+- section固有の動的CSS/JSは `{% stylesheet %}` / `{% javascript %}` を優先
 - atoms同士は相互参照しない（molecules→atoms、organisms→molecules/atomsの一方向のみ）
 - 一時展開ディレクトリは処理完了後に削除する
 - Stitchで再生成の選択肢が出たら処理を中断し、追加zipで再実行させる
