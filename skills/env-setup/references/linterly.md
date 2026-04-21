@@ -8,8 +8,8 @@
 # Go
 go install github.com/ousiassllc/linterly/cmd/linterly@latest
 
-# npm
-npm install -D @linterly/cli
+# bun
+bun add -D @linterly/cli
 ```
 
 ## 基本コマンド
@@ -62,7 +62,7 @@ md・yml・json・toml 等はデフォルト除外に含まれないが、linter
 
 ```yaml
 - name: Linterly check
-  run: npx linterly check
+  run: bunx linterly check
 ```
 
 ## Git Hooks連携
@@ -72,5 +72,5 @@ Lefthook:
 pre-commit:
   commands:
     linterly:
-      run: npx linterly check {staged_files}
+      run: bunx linterly check {staged_files}
 ```

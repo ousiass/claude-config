@@ -42,7 +42,7 @@ user-invocable: true
 ### 1-2: プロジェクト既存設定の確認
 
 以下をチェック（存在するもののみ）:
-- `package.json` / `go.mod` / `Cargo.toml` 等（言語・依存）
+- `package.json` / `bun.lockb` / `go.mod` / `Cargo.toml` 等（言語・依存）
 - `.github/workflows/` （既存CI）
 - ESLint / Biome / Prettier / `.linterly.yml` 等（既存lint/format設定）
 - `lefthook.yml` / `.husky/` （既存hooks）
@@ -54,7 +54,7 @@ user-invocable: true
 
 仕様書とプロジェクト設定から技術スタックを整理し、ユーザーに確認:
 - 言語 / フレームワーク
-- パッケージマネージャ
+- パッケージマネージャ（TypeScript/JavaScript は **bun** を推奨）
 - 既存ツールの有無
 
 ## フェーズ2: ヒアリングと構成決定
@@ -129,7 +129,7 @@ APIサーバーを含むプロジェクトでのみ提示する。仕様書にAP
 
 Swagger UIの代わりに **Stoplight Elements** を推奨する。言語・FWに依存せず統一的なAPIドキュメントUIを提供できる。
 
-- **パッケージ:** `@stoplight/elements`（npm）または CDN（`unpkg.com/@stoplight/elements`）
+- **パッケージ:** `@stoplight/elements`（bun）または CDN（`unpkg.com/@stoplight/elements`）
 - **組み込み方式:** サーバーが生成したOpenAPI specファイル（JSON/YAML）を読み込むHTMLページを配置
   - 静的HTMLファイル1枚で完結（Web Component `<elements-api>` を使用）
   - サーバー側のUI用ミドルウェアが不要になる
