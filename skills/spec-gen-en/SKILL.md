@@ -60,17 +60,17 @@ Search for existing specs using Glob:
 #### Output Destination
 
 Confirm with `AskUserQuestion`:
-- **GitHub Issue + branch** (recommended): Create feat Issue and work on a branch. Optimal for linking with impl skill
+- **GitHub Issue + branch** (recommended): Create the implementation Issue, then use its number for the work branch. The same Issue can be passed to `impl` at the end
 - **Local only**: Work on current branch without creating Issues or branches
 
 #### For New Projects
 1. Interview about overview, purpose, and background
 2. Present similar projects and tech stack direction
 3. Agree on document scope
-4. **GitHub Issue mode**: Record base branch -> create feat Issue -> create `feat/#<issue-number>` branch -> add branch name to Issue
-   - **Issue title must describe the feature to implement** (e.g., `feat: User authentication`). Never use document-centric titles like "Create design documents"
-   - Issue body should be a summary of implementation requirements; add design document links as supplementary references
-   - This ensures that the `impl` skill correctly focuses on feature implementation when reading the Issue
+4. **GitHub Issue mode**: Record base branch -> **create placeholder Issue** -> create `feat/#<issue-number>` branch -> add branch name to Issue
+   - **Issue title must be `feat: <feature-name>`** (the feature to implement). Never use document-centric titles like "Create design documents"
+   - **Body is a placeholder at this point** (e.g., `仕様策定中（spec-gen 実行中）。完了後に実装内容を追記する。`). Phase 3 rewrites it as the implementation Issue
+   - Spec creation itself is the work of this skill, not a separate Issue. The goal here is to reserve an Issue number that will be reused as the impl target
 5. Create tasks with TaskCreate
 
 #### For Appending to Existing Specs
@@ -78,7 +78,7 @@ Confirm with `AskUserQuestion`:
 2. Interview about additions
 3. Present existing feature reuse/change proposals
 4. Agree on direction
-5. **GitHub Issue mode**: Same as above (Issue title describes the feature to add)
+5. **GitHub Issue mode**: Same as above (Issue title describes the feature to add; body is a placeholder)
 6. Create tasks with TaskCreate
 
 ## Phase 2: Document Creation Cycle (repeat per document)
@@ -107,7 +107,12 @@ Confirm with `AskUserQuestion`:
 
 1. Confirm all documents are complete
 2. Cross-document consistency check (ER vs API, components vs functional requirements, etc.)
-3. **GitHub Issue mode**: Push -> add spec links to Issue -> report summary (including Issue URL)
+3. **GitHub Issue mode**: Push -> **rewrite the Issue body as the implementation Issue** -> report summary (including Issue URL)
+   - Replace the placeholder body of the Issue created in Phase 1 with the implementation Issue contents, following `templates/impl-issue.md`
+   - Include: 概要 (overview), spec file links to consult during implementation, 受け入れ条件 (acceptance criteria), base branch
+   - Acceptance criteria must be extracted from the spec docs as concrete completion conditions (avoid vague "implement it")
+   - Write the new body to a temp file and apply with `gh issue edit <number> --body-file <temp-file>`, then delete the temp file
+   - Keep the Issue open (do not close). It can be passed directly to `/impl #<number>`
 4. **Local mode**: Report summary (file path list)
 
 ## Rules
