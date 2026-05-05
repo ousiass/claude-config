@@ -20,6 +20,18 @@ user-invocable: true
 - **Text** (e.g., `/impl-en Add user authentication`): Use text as requirements
 - **No arguments**: Interview the user for requirements
 
+## Forbidden Actions (Critical)
+
+If any of the following occurs, redo that phase. Skipping for "context savings" or "small change" is not accepted.
+
+- Skipping any sub-step (2-1 to 2-6) with "later", "leave as TODO", or "separate PR"
+- Silently skipping a phase or sub-step without declaring it to the user
+- Committing with unimplemented tests or dummy assertions (e.g., `expect(true).toBe(true)`)
+- Self-reviewing instead of calling the `review` agent
+- Skipping lint/format without attempting to run (skipping is allowed only after running and confirming no settings exist)
+
+If scope reduction is needed, redo Phase 1 scope splitting and confirm with the user instead of skipping phases.
+
 ## Phase 1: Requirements Analysis and Scope Splitting
 
 1. Retrieve requirements from arguments
@@ -94,4 +106,6 @@ user-invocable: true
 - **Commit at each scope completion.** Never proceed without committing
 - Fix review issues at all severity levels
 - Track progress with TaskCreate/TaskUpdate
+- **Phase declaration**: At the start of each sub-step (2-1 to 2-6) display `▶ 2-X start: <name>`, and on completion display `✓ 2-X done`. This prevents silent skipping.
+- **Self-check**: Before completing each phase, re-read the corresponding section of this SKILL.md and verify no steps were skipped before moving to the next phase.
 - On compaction (context compression), check current progress with `TaskList` before resuming work
